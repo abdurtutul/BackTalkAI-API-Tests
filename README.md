@@ -1,6 +1,6 @@
 # 🧪 BackTalkAI – Postman API Testing Collection
 
-`API testing collection using Postman and Newman with detailed reports.`
+``API testing collection using Postman and Newman with detailed reports.``
 
 This repository demonstrates automated API testing for the **BackTalkAI** project using **Postman** and **Newman**. It includes robust test scripts, environment variable usage, negative test cases, and detailed HTML test reports.
 
@@ -65,7 +65,7 @@ newman run BackTalkAI.postman_collection.json -e BackTalkAI.postman_environment.
 
 ## 🔗 Postman Cloud Link
 
-📎 [View Postman Collection](https://lunar-firefly-999126.postman.co/workspace/API-key~c5a74af9-79da-4c42-a7c3-e5d43fdad2dd/collection/22742638-e1a54a11-f31a-4714-997a-db808abfc1e7?action=share&source=collection_link&creator=22742638)
+📎 [View Postman Collection](https://lunar-firefly-999126.postman.co/workspace/API-key~c5a74af9-79da-4c42-a7c3-e5d43fdad2dd/collection/22742638-e1a54a11-f31a-4714-997a-db808abfc1e7?action=share&creator=22742638&active-environment=22742638-c384587a-8b0d-4f29-b06b-4628903eb0ea)
 
 ---
 
