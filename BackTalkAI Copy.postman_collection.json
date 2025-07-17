@@ -1,0 +1,696 @@
+{
+	"info": {
+		"_postman_id": "e1a54a11-f31a-4714-997a-db808abfc1e7",
+		"name": "BackTalkAI Copy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22742638",
+		"_collection_link": "https://lunar-firefly-999126.postman.co/workspace/API-key~c5a74af9-79da-4c42-a7c3-e5d43fdad2dd/collection/22742638-e1a54a11-f31a-4714-997a-db808abfc1e7?action=share&source=collection_link&creator=22742638"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Signup",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const body=JSON.parse(pm.request.body.raw)\r",
+									"\r",
+									"pm.collectionVariables.set(\"email\",body.email)\r",
+									"pm.collectionVariables.set(\"password\",body.password)\r",
+									"\r",
+									"if (pm.response.code === 201) {\r",
+									"    pm.test(\"✅ OK - Creating new user ID was successful. Tokens returned.\", function () {\r",
+									"        pm.response.to.have.status(201);\r",
+									"    });\r",
+									"} else {\r",
+									"    pm.test(\"❌ Failed - Creating new user ID was unsuccessful.\", function () {\r",
+									"        pm.expect(pm.response.code).to.eql(200); \r",
+									"    });\r",
+									"}\r",
+									"pm.test(\"Response contains required fields\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response).to.have.property('status').that.equals(201);\r",
+									"    pm.expect(response).to.have.property('success').that.is.a('boolean');\r",
+									"    pm.expect(response).to.have.property('message').that.is.a('string');\r",
+									"    pm.expect(response).to.have.property('data').that.is.an('object');\r",
+									"    \r",
+									"    const data = response.data;\r",
+									"    pm.expect(data).to.have.property('id').that.is.a('number');\r",
+									"    pm.expect(data).to.have.property('email').that.is.a('string');\r",
+									"    pm.expect(data).to.have.property('full_name').that.is.a('string');\r",
+									"    pm.expect(data).to.have.property('access_token').that.is.a('string');\r",
+									"});\r",
+									"// Test for response time\r",
+									"pm.test(\"Response time is less than 2000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"});\r",
+									"\r",
+									"// Test for content type in response headers\r",
+									"pm.test(\"Content-Type is application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+									"});\r",
+									"\r",
+									"// Test for successful status message\r",
+									"pm.test(\"Success message is returned correctly\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response.message).to.equal(\"User created successfully\");\r",
+									"});\r",
+									"pm.test(\"Response schema is valid\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response).to.have.all.keys('status', 'success', 'message', 'data');\r",
+									"    pm.expect(response.data).to.have.all.keys('id', 'email', 'full_name', 'access_token');\r",
+									"});\r",
+									"pm.test(\"Response contains 'data' field with expected properties\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    const data = response.data;\r",
+									"\r",
+									"    pm.expect(data).to.have.property('id');\r",
+									"    pm.expect(data).to.have.property('email');\r",
+									"    pm.expect(data).to.have.property('full_name');\r",
+									"    pm.expect(data).to.have.property('access_token');\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let randomnum = String(Math.floor(Math.random() * 100000000)).padStart(8,0);\r",
+									"console.log('random number',randomnum)\r",
+									"\r",
+									"pm.collectionVariables.set(\"signup_password\", randomnum)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"full_name\": \"{{$randomFullName}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"{{signup_password}}\",\r\n    \"confirm_password\": \"{{signup_password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}account/signup/",
+							"host": [
+								"{{local}}account"
+							],
+							"path": [
+								"signup",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Signup",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"full_name\": \"{{$randomFullName}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"{{signup_password}}87\",\r\n    \"confirm_password\": \"{{signup_password}}878\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}account/signup/",
+									"host": [
+										"{{base_url}}account"
+									],
+									"path": [
+										"signup",
+										""
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [
+								{
+									"expires": "Invalid Date"
+								}
+							],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Signin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"const response_data = pm.response.json()\r",
+									"console.log(response_data)\r",
+									"\r",
+									"pm.collectionVariables.set(\"access_token\", response_data.access)\r",
+									"\r",
+									"pm.test(\"Signin response status is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Test for Content-Type header\r",
+									"pm.test(\"Content-Type is application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');\r",
+									"});\r",
+									"\r",
+									"// Test for presence of refresh and access tokens\r",
+									"pm.test(\"Response contains refresh and access tokens\", function () {\r",
+									"    pm.expect(response_data).to.have.property('refresh');\r",
+									"    pm.expect(response_data).to.have.property('access');\r",
+									"});\r",
+									"\r",
+									"// Test for refresh and access tokens being strings\r",
+									"pm.test(\"Refresh and access tokens are strings\", function () {\r",
+									"    pm.expect(response_data.refresh).to.be.a('string');\r",
+									"    pm.expect(response_data.access).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}account/signin/",
+							"host": [
+								"{{local}}account"
+							],
+							"path": [
+								"signin",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "401",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"jhon@gmail.com\",\r\n    \"password\": \"pass@123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local}}account/signin/",
+									"host": [
+										"{{local}}account"
+									],
+									"path": [
+										"signin",
+										""
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": "{\r\n    \"detail\": \"No active account found with the given credentials\"\r\n}"
+						}
+					]
+				},
+				{
+					"name": "Forget Password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();\r",
+									"if (res.success && res.otp) {\r",
+									"    pm.environment.set(\"otp_code\", res.otp); // if API returns it directly\r",
+									"} else if (res.message && res.message.includes(\"otp is\")) {\r",
+									"    const match = res.message.match(/otp is (\\d{4,6})/);\r",
+									"    if (match) {\r",
+									"        pm.environment.set(\"otp_code\", match[1]);\r",
+									"    }\r",
+									"}\r",
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"if (pm.response.code === 200) {\r",
+									"\r",
+									"        pm.test(\"✅ Forgot pass/reset pass was successful\", function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"         });\r",
+									"        pm.test(\"✅ Success Status is 'true'\", function () {\r",
+									"        pm.expect(jsonData.success).to.eql(true);\r",
+									"        });\r",
+									"        pm.test(\"✅ Verify message - Password reset link sent to your email\",function(){\r",
+									"        pm.expect(jsonData.message).to.include(\"Password reset link sent to your email, otp is\"); \r",
+									"        pm.expect(jsonData.message).to.include(pm.environment.get(\"otp_code\")); \r",
+									"        });\r",
+									"   \r",
+									"} else {\r",
+									"        pm.test(\"❌  Forgot pass/reset pass was unsuccessful\", function () {\r",
+									"        pm.response.to.have.status(400);\r",
+									"         });\r",
+									"        pm.test(\"❌  Status code is '400'\", function () {\r",
+									"        pm.expect(jsonData.status).to.eql(400);\r",
+									"        });\r",
+									"        pm.test(\"❌  Success Status is 'false'\", function () {\r",
+									"        pm.expect(jsonData.success).to.eql(false);\r",
+									"        });\r",
+									"        pm.test(\"❌  Verify message - Password reset failed.\",function(){\r",
+									"        pm.expect(jsonData.message).to.include(\"Password reset failed.\"); \r",
+									"        });\r",
+									"        pm.test(\"❌  Verify message - Enter a valid email address.\",function(){\r",
+									"        pm.expect(jsonData.errors.email).to.include(\"Enter a valid email address.\"); \r",
+									"        });\r",
+									"\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{email}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}account/forget-password/",
+							"host": [
+								"{{local}}account"
+							],
+							"path": [
+								"forget-password",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set New Password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"✅ OK - Password changed successfully\", function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    });\r",
+									"} else {\r",
+									"    pm.test(\"❌ Failed - Password changed unsuccessful.\", function () {\r",
+									"        pm.expect(pm.response.code).to.eql(401); \r",
+									"    });\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"email\": \"{{email}}\",\r\n   \"otp\": \"{{otp_code}}\",\r\n   \"new_password\": \"{{signup_password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}account/set-password/",
+							"host": [
+								"{{local}}account"
+							],
+							"path": [
+								"set-password",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.eql(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response contains required fields\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData).to.have.all.keys('status', 'success', 'message', 'data');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Success should be a boolean value\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.success).to.be.a('boolean');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Verify token is a non-empty string\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.data).to.exist.and.to.be.an('object');\r",
+									"    pm.expect(responseData.data.verify_token).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"otp\":\"{{otp_code}}\",\r\n    \"email\":\"{{email}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}account/verify-token/",
+							"host": [
+								"{{local}}account"
+							],
+							"path": [
+								"verify-token",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "AI Chat",
+			"item": [
+				{
+					"name": "Chat",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"const res = pm.response.json();\r",
+									"pm.test(\"Chat success is true\", function () {\r",
+									"    pm.expect(res.success).to.eql(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains image or message\", function () {\r",
+									"    pm.expect(res.message || res.data).to.be.ok;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Randomly choose between \"text\" and \"image\"",
+									"const types = [\"text\", \"image\"];",
+									"const chatType = types[Math.floor(Math.random() * types.length)];",
+									"pm.variables.set(\"chat_type\", chatType);",
+									"",
+									"// Full dynamic message generator",
+									"let message = \"\";",
+									"",
+									"if (chatType === \"text\") {",
+									"    const topics = [\"AI\", \"quantum computing\", \"robotics\", \"space travel\", \"human emotions\", \"machine learning\", \"neural networks\", \"natural language processing\"];",
+									"    const verbs = [\"Explain\", \"Tell me about\", \"Summarize\", \"Debate\", \"Describe\", \"Compare\", \"Criticize\"];",
+									"    const formats = [\"in simple terms\", \"for a child\", \"in 100 words\", \"with an example\", \"like a poem\", \"in a funny way\"];",
+									"",
+									"    const topic = topics[Math.floor(Math.random() * topics.length)];",
+									"    const verb = verbs[Math.floor(Math.random() * verbs.length)];",
+									"    const format = formats[Math.floor(Math.random() * formats.length)];",
+									"",
+									"    message = `${verb} ${topic} ${format}.`;",
+									"} else {",
+									"    const themes = [\"cats coding\", \"robots dancing\", \"AI vs human\", \"work from home\", \"future cities\", \"lazy programmer\"];",
+									"    const actions = [\"as a meme\", \"in a Pixar style\", \"as a surreal painting\", \"in comic strip format\", \"as a vaporwave poster\"];",
+									"",
+									"    const theme = themes[Math.floor(Math.random() * themes.length)];",
+									"    const action = actions[Math.floor(Math.random() * actions.length)];",
+									"",
+									"    message = `Create an image of ${theme} ${action}.`;",
+									"}",
+									"",
+									"pm.variables.set(\"chat_message\", message);",
+									"",
+									"console.log(\"chat_type:\", chatType);",
+									"console.log(\"chat_message:\", message);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\": \"{{chat_type}}\",\r\n    \"tone_id\": 1,\r\n    \"message\": \"{{chat_message}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}ai/chat/",
+							"host": [
+								"{{local}}ai"
+							],
+							"path": [
+								"chat",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Image",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"type\": \"image\",\r\n    \"tone_id\": 1,\r\n    \"message\": \"Working from home but your cat thinks you're on vacation.\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local}}ai/chat/",
+									"host": [
+										"{{local}}ai"
+									],
+									"path": [
+										"chat",
+										""
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 04 Jun 2025 09:18:47 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.13.1"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "POST, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "334"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 201,\n    \"success\": true,\n    \"message\": \"AI generated meme created successfully\",\n    \"data\": {\n        \"id\": \"7f715166-c773-4d32-bc42-758bb99227d0\",\n        \"input_text\": \"Working from home but your cat thinks you're on vacation.\",\n        \"image_url\": \"http://127.0.0.1:8000/media/memes/1880bfe103594336baafe1a1f80653a1.png\",\n        \"created_at\": \"2025-06-04T09:18:47.396751Z\"\n    }\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "email",
+			"value": ""
+		},
+		{
+			"key": "password",
+			"value": ""
+		},
+		{
+			"key": "access_token",
+			"value": ""
+		},
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:8000/api/",
+			"type": "string"
+		},
+		{
+			"key": "signin_password",
+			"value": ""
+		},
+		{
+			"key": "signup_password",
+			"value": ""
+		}
+	]
+}
